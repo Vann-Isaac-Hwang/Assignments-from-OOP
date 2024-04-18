@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Widget</class>
+ <widget class="QWidget" name="Widget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>520</width>
+    <height>760</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Widget</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(50,50,50);</string>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>501</width>
+     <height>741</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,4,0,1">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <italic>false</italic>
+        <bold>true</bold>
+        <underline>false</underline>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(230,230,230);</string>
+      </property>
+      <property name="text">
+       <string>                                     Elevator Simulator</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1">
+        <item>
+         <widget class="QLCDNumber" name="Floor_number">
+          <property name="styleSheet">
+           <string notr="true">color: rgb(64,224,208);</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QPushButton" name="pushButton_6">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(230,230,230);background-color: rgb(80,80,80);</string>
+            </property>
+            <property name="text">
+             <string>Go to 6</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_5">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(230,230,230);background-color: rgb(80,80,80);</string>
+            </property>
+            <property name="text">
+             <string>Go to 5</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_4">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(230,230,230);background-color: rgb(80,80,80);color: rgb(230,230,230);</string>
+            </property>
+            <property name="text">
+             <string>Go to 4</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_3">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(80,80,80);color: rgb(230,230,230);</string>
+            </property>
+            <property name="text">
+             <string>Go to 3</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(230,230,230);background-color: rgb(80,80,80);</string>
+            </property>
+            <property name="text">
+             <string>Go to 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_1">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(230,230,230);background-color: rgb(80,80,80);</string>
+            </property>
+            <property name="text">
+             <string>Go to 1</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLCDNumber" name="F6">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255,0,0);</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="F5">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255,0,0);</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="F4">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255,0,0);</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="F3">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255,0,0);</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="F2">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255,0,0);</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="F1">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255,0,0);</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QPushButton" name="start_button">
+        <property name="styleSheet">
+         <string notr="true">color: rgb(230,230,230);background-color: rgb(60,60,60);</string>
+        </property>
+        <property name="text">
+         <string>START</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cancelButton">
+        <property name="styleSheet">
+         <string notr="true">color: rgb(230,230,230);background-color: rgb(60,60,60);</string>
+        </property>
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QLCDNumber" name="Time_lcd">
+      <property name="styleSheet">
+       <string notr="true">color: rgb(180,180,180);</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
