@@ -1,2 +1,2 @@
-##Elevator Simulator
-#Made with Qt
+# Elevator Simulator
+## Made with Qt
