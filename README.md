@@ -10,5 +10,5 @@
 * ### Click **Cancel** to stop the program
 ## Mechanism
 * ### The program won't start before the button **START** is clicked
-* ### Wait 2 minutes at each floor when running
+* ### Wait 2 seconds at each floor when running
 * ### Upward direction at the beginning
