@@ -26,6 +26,69 @@ regi::~regi()
     delete ui;
 }
 
+void regi::set_theme(const std::string& s)
+{
+    if (s=="Default")
+    {
+        ui->cancelButton->setStyleSheet("");
+        ui->confirmButton->setStyleSheet("");
+        this->setStyleSheet("");
+    }
+    else if (s=="BlackNBlue")
+    {
+        ui->cancelButton->setStyleSheet("background-color: rgb(55,55,55);");
+        ui->confirmButton->setStyleSheet("background-color: rgb(55,55,55);");
+        this->setStyleSheet("color: rgb(240,240,240);\
+                                background-color: rgb(45,45,45);");
+    }
+    else if (s=="Blue")
+    {
+        ui->cancelButton->setStyleSheet("background-color: rgb(55,55,55);");
+        ui->confirmButton->setStyleSheet("background-color: rgb(55,55,55);");
+        this->setStyleSheet("color: rgb(240,240,240);\
+                                background-color: rgb(30,144,255);");
+    }
+    else if (s=="Purple")
+    {
+        ui->cancelButton->setStyleSheet("background-color: rgb(55,55,55);");
+        ui->confirmButton->setStyleSheet("background-color: rgb(55,55,55);");
+        this->setStyleSheet("color: rgb(240,240,240);\
+                                background-color: rgb(123,104,238);");
+    }
+}
+
+void regi::mousePressEvent(QMouseEvent *event)//This function makes the window draggable
+{
+
+    if( (event->button() == Qt::LeftButton) ){
+        mouse_press = true;
+        mousePoint = event->globalPos() - this->pos();
+        //event->accept();
+    }
+    else if(event->button() == Qt::RightButton)
+    {
+        //Right click to close
+        //this->close();
+        mouse_press = true;
+        mousePoint = event->globalPos() - this->pos();
+
+    }
+}
+
+void regi::mouseMoveEvent(QMouseEvent *event)
+{
+    if(mouse_press)
+    {
+        move(event->globalPos() - mousePoint);
+        //event->accept();
+    }
+}
+
+void regi::mouseReleaseEvent(QMouseEvent *event)
+{
+    mouse_press = false;
+}
+
 void regi::on_cancelButton_clicked()
 {
     this->close();
@@ -42,7 +105,7 @@ void regi::on_confirmButton_clicked()
     if (ui->CPasswordEdit->text().toStdString()=="") {f=0;}
 
     //Check all the information
-    QString s01 = "Username exist.";
+    QString s01 = "Username exists.";
     QString s1 = "Please fill in all the information.";
     QString s2 = "Please enter a correct phone number.";
     QString s3 = "The passwords don't match.";
@@ -79,65 +142,3 @@ void regi::on_confirmButton_clicked()
     }
 }
 
-void regi::mousePressEvent(QMouseEvent *event)//This function makes the window draggable
-{
-
-    if( (event->button() == Qt::LeftButton) ){
-        mouse_press = true;
-        mousePoint = event->globalPos() - this->pos();
-        //event->accept();
-    }
-    else if(event->button() == Qt::RightButton)
-    {
-        //Right click to close
-        //this->close();
-        mouse_press = true;
-        mousePoint = event->globalPos() - this->pos();
-
-    }
-}
-
-void regi::mouseMoveEvent(QMouseEvent *event)
-{
-    if(mouse_press)
-    {
-        move(event->globalPos() - mousePoint);
-        //event->accept();
-    }
-}
-
-void regi::mouseReleaseEvent(QMouseEvent *event)
-{
-    mouse_press = false;
-}
-
-void regi::set_theme(const std::string s)
-{
-    if (s=="Default")
-    {
-        ui->cancelButton->setStyleSheet("");
-        ui->confirmButton->setStyleSheet("");
-        this->setStyleSheet("");
-    }
-    else if (s=="BlackNBlue")
-    {
-        ui->cancelButton->setStyleSheet("background-color: rgb(55,55,55);");
-        ui->confirmButton->setStyleSheet("background-color: rgb(55,55,55);");
-        this->setStyleSheet("color: rgb(240,240,240);\
-                                background-color: rgb(45,45,45);");
-    }
-    else if (s=="Blue")
-    {
-        ui->cancelButton->setStyleSheet("background-color: rgb(55,55,55);");
-        ui->confirmButton->setStyleSheet("background-color: rgb(55,55,55);");
-        this->setStyleSheet("color: rgb(240,240,240);\
-                                background-color: rgb(30,144,255);");
-    }
-    else if (s=="Purple")
-    {
-        ui->cancelButton->setStyleSheet("background-color: rgb(55,55,55);");
-        ui->confirmButton->setStyleSheet("background-color: rgb(55,55,55);");
-        this->setStyleSheet("color: rgb(240,240,240);\
-                                background-color: rgb(123,104,238);");
-    }
-}

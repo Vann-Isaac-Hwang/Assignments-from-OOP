@@ -125,7 +125,7 @@ void login::mouseReleaseEvent(QMouseEvent *event)
     mouse_press = false;
 }
 
-void login::set_theme(const std::string s)
+void login::set_theme(const std::string& s)
 {
     if (s=="Default")
     {

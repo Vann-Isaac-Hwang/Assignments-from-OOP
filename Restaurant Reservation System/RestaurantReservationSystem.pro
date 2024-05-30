@@ -12,6 +12,7 @@ SOURCES += \
     TimeManage.cpp \
     login.cpp \
     mainwindowadmin.cpp \
+    menu.cpp \
     regi.cpp \
     sqlite3.c \
     AccessDB.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     TimeManage.h \
     login.h \
     mainwindowadmin.h \
+    menu.h \
     regi.h \
     sqlite3.h \
     AccessDB.h \
@@ -31,6 +33,7 @@ FORMS += \
     login.ui \
     mainwindow.ui \
     mainwindowadmin.ui \
+    menu.ui \
     regi.ui
 
 # Default rules for deployment.

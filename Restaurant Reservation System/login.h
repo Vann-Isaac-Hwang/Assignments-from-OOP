@@ -20,7 +20,7 @@ public:
     explicit login(QWidget *parent = nullptr);
     ~login();
 
-    void set_theme(const std::string s);
+    void set_theme(const std::string& s);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);

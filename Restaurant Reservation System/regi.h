@@ -20,7 +20,7 @@ public:
     explicit regi(QWidget *parent = nullptr);
     ~regi();
 
-    void set_theme(const std::string s);
+    void set_theme(const std::string& s);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);

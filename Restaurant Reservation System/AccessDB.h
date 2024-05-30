@@ -37,6 +37,19 @@ struct reservation{
     int deposit;
 };
 
+struct food{
+    int id;
+    std::string name;
+    int price;
+    std::string description;
+};
+
+struct pair{
+    int id;
+    int reservation_id;
+    int food_id;
+};
+
 class AccessDB{
 private:
     sqlite3* db = nullptr;
@@ -47,13 +60,15 @@ public:
     // CONSTRUCTOR AND DESTRUCTOR
     explicit AccessDB(const std::string& db_name); // Open the database according to the name.
     ~AccessDB(); // Close the database.
-
+    
     // CREATE TABLE
     bool create_administrator_table(); // Create the administrator table.
     bool create_user_table(); // Create the user table.
     bool create_reservation_table(); // Create the reservation table.
+    bool create_food_table(); // Create the food table.
+    bool create_pair_table(); // Create the pair table.
     bool reset_sqlite_sequence(); // Reset the sqlite_sequence.
-
+    
     // MANIPULATE ADMINISTRATOR TABLE
     bool add_administrator(const std::string& name, const std::string& password);
     bool delete_administrator(const std::string& name);
@@ -76,8 +91,8 @@ public:
 
     // MANIPULATE RESERVATION TABLE
     bool add_reservation(const std::string& user_name, const duration& dur, const std::string& table_type, int table_id, int deposit);
+    bool add_reservation(const reservation& res) const;
     bool delete_reservation(const std::string& user_name);
-    bool add_reservation(const reservation &res) const;
     bool delete_reservation(int id);
     bool replace_all_username(const std::string& old_name, const std::string& new_name);
     bool modify_reservation_user_name(int id, const std::string& target_user_name);
@@ -88,6 +103,23 @@ public:
     bool reset_reservation_id();
     bool clear_reservation_table();
 
+    // MANIPULATE FOOD TABLE
+    bool add_food(const std::string& name, int price, const std::string& description);
+    bool delete_food(const std::string& name);
+    bool delete_food(int id);
+    bool modify_food_name(int id, const std::string& target_name);
+    bool modify_food_price(int id, int target_price);
+    bool modify_food_description(int id, const std::string& target_description);
+    bool reset_food_id();
+    bool clear_food_table();
+
+    // MANIPULATE PAIR TABLE
+    bool add_pair(int reservation_id, int food_id);
+    bool delete_pair(int reservation_id, int food_id);
+    bool delete_pair(int reservation_id);
+    bool reset_pair_id();
+    bool clear_pair_table();
+
     // ACQUIRE INFORMATION
     [[nodiscard]] bool check_exist(int id, const std::string& table) const;
     [[nodiscard]] bool check_exist(const std::string& name, const std::string& table) const;
@@ -97,9 +129,15 @@ public:
     [[nodiscard]] admin get_administrator_info(const std::string& name) const;
     [[nodiscard]] reservation get_reservation_info(int id) const;
     [[nodiscard]] reservation get_reservation_info(const std::string& user_name) const;
+    [[nodiscard]] food get_food_info(int id) const;
+    [[nodiscard]] food get_food_info(const std::string& name) const;
+    [[nodiscard]] pair get_pair_info(int id) const;
+    [[nodiscard]] pair get_pair_info(int reservation_id, int food_id) const;
     [[nodiscard]] int get_table_length(const std::string& table) const;
     [[nodiscard]] reservation getReservationInfo(int index) const;
     [[nodiscard]] user getUserInfo(int index) const;
+    [[nodiscard]] food getFoodInfo(int index) const;
+    [[nodiscard]] pair getPairInfo(int index) const;
 
     // VERIFY PASSWORD
     [[nodiscard]] bool verify_password(const std::string& name, const std::string& password,const std::string& table) const;
@@ -107,8 +145,8 @@ public:
     [[nodiscard]] bool verify_password_phone(const std::string& phone_number, const std::string& password) const;
 
     // PRINT INFORMATION
-    void print_all(const std::string& table) const;
-    void print_all() const;
+    void print_all(const std::string& table) const; //UPDATE
+    void print_all() const; //UPDATE
 
 };
 

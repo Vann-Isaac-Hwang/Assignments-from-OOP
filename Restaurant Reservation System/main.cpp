@@ -18,8 +18,19 @@ void pioneer()
     AccessDB db("data.db");
 
 
+    //db.clear_food_table();
+    //db.reset_food_id();
+    db.create_food_table();
+
+    //db.clear_pair_table();
+    //db.reset_pair_id();
+    db.create_pair_table();
+    //db.add_pair(1,1);
+
+
+
     db.clear_administrator_table();
-    db.reset_administrator_id();
+    //db.reset_administrator_id();
     db.create_administrator_table();
 
     db.create_user_table();

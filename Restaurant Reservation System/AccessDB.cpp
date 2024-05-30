@@ -83,6 +83,40 @@ bool AccessDB::create_reservation_table() {
     return true;
 }
 
+bool AccessDB::create_food_table() {
+    std::cout<<"Trying to create food table ..."<<std::endl;
+    std::string sql = "CREATE TABLE food (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, price INTEGER NOT NULL, description TEXT NOT NULL);";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "create food table failed\n");
+        std::cout<<"create food table failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "create food table success"<<std::endl;
+    }
+    return true;
+}
+
+bool AccessDB::create_pair_table() {
+    std::cout<<"Trying to create pair table ..."<<std::endl;
+    std::string sql = "CREATE TABLE pair (id INTEGER PRIMARY KEY AUTOINCREMENT, reservation_id INTEGER NOT NULL, food_id INTEGER NOT NULL);";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "create pair table failed\n");
+        std::cout<<"create pair table failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "create pair table success"<<std::endl;
+    }
+    return true;
+}
+
 bool AccessDB::reset_sqlite_sequence() {
     std::cout<<"Resetting sqlite_sequence ..."<<std::endl;
     std::string sql = "DELETE FROM sqlite_sequence;";
@@ -188,45 +222,19 @@ bool AccessDB::modify_administrator_password(int id, const std::string& target_p
 }
 
 bool AccessDB::reset_administrator_id() {
-    std::cout << "Resetting id ..." << std::endl;
-
-    // First, rename the old table
-    std::string renameSql = "ALTER TABLE administrator RENAME TO old_administrator;";
-    rc = sqlite3_exec(db, renameSql.c_str(), nullptr, nullptr, nullptr);
-    if (rc != SQLITE_OK) {
-        sqlite3_log(sqlite3_errcode(db), "rename old administrator table failed\n");
-        std::cout << "rename old administrator table failed" << std::endl;
+    std::cout<<"Resetting id ..."<<std::endl;
+    std::string sql = "DELETE FROM sqlite_sequence WHERE name = 'administrator';";
+    rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "reset administrator id failed\n");
+        std::cout<<"reset administrator id failed"<<std::endl;
         return false;
     }
-
-    // Then, create a new table
-    std::string createSql = "CREATE TABLE administrator (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, password TEXT NOT NULL);";
-    rc = sqlite3_exec(db, createSql.c_str(), nullptr, nullptr, nullptr);
-    if (rc != SQLITE_OK) {
-        sqlite3_log(sqlite3_errcode(db), "create new administrator table failed\n");
-        std::cout << "create new administrator table failed" << std::endl;
-        return false;
+    else
+    {
+        std::cout << "reset administrator id success"<<std::endl;
     }
-
-    // Finally, copy the old data to the new table
-    std::string copySql = "INSERT INTO administrator SELECT NULL, name, password FROM old_administrator;";
-    rc = sqlite3_exec(db, copySql.c_str(), nullptr, nullptr, nullptr);
-    if (rc != SQLITE_OK) {
-        sqlite3_log(sqlite3_errcode(db), "copy old data to new administrator table failed\n");
-        std::cout << "copy old data to new administrator table failed" << std::endl;
-        return false;
-    }
-
-    // And drop the old table
-    std::string dropSql = "DROP TABLE old_administrator;";
-    rc = sqlite3_exec(db, dropSql.c_str(), nullptr, nullptr, nullptr);
-    if (rc != SQLITE_OK) {
-        sqlite3_log(sqlite3_errcode(db), "drop old administrator table failed\n");
-        std::cout << "drop old administrator table failed" << std::endl;
-        return false;
-    }
-
-    std::cout << "reset administrator id success" << std::endl;
     return true;
 }
 
@@ -296,23 +304,6 @@ bool AccessDB::delete_user(int id) {
     else
     {
         std::cout << "delete user success"<<std::endl;
-    }
-    return true;
-}
-
-bool AccessDB::replace_all_username(const std::string& old_name, const std::string& new_name) {
-    std::cout<<"Trying to replace all username ..."<<std::endl;
-    std::string sql = "UPDATE reservation SET user_name = '"+new_name+"' WHERE user_name = '"+old_name+"';";
-    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
-    if (rc_local == SQLITE_ERROR)
-    {
-        sqlite3_log(sqlite3_errcode(db), "replace all username failed\n");
-        std::cout<<"replace all username failed"<<std::endl;
-        return false;
-    }
-    else
-    {
-        std::cout << "replace all username success"<<std::endl;
     }
     return true;
 }
@@ -515,6 +506,23 @@ bool AccessDB::delete_reservation(int id) {
     return true;
 }
 
+bool AccessDB::replace_all_username(const std::string& old_name, const std::string& new_name) {
+    std::cout<<"Trying to replace all username ..."<<std::endl;
+    std::string sql = "UPDATE reservation SET user_name = '"+new_name+"' WHERE user_name = '"+old_name+"';";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "replace all username failed\n");
+        std::cout<<"replace all username failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "replace all username success"<<std::endl;
+    }
+    return true;
+}
+
 bool AccessDB::modify_reservation_user_name(int id, const std::string& target_user_name) {
     std::cout<<"Trying to modify reservation user name ..."<<std::endl;
     std::string sql = "UPDATE reservation SET user_name = '"+target_user_name+"' WHERE id = "+std::to_string(id)+";";
@@ -664,6 +672,283 @@ bool AccessDB::clear_reservation_table() {
     return true;
 }
 
+// MANIPULATE FOOD TABLE
+
+bool AccessDB::add_food(const std::string& name, int price, const std::string& description) {
+    std::cout<<"Trying to add food ..."<<std::endl;
+    std::string sql = "INSERT INTO food (name, price, description) VALUES ('"+name+"', "+std::to_string(price)+", '"+description+"');";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "add food failed\n");
+        std::cout<<"add food failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "add food success"<<std::endl;
+    }
+    return true;
+}
+
+bool AccessDB::delete_food(const std::string& name) {
+    std::cout<<"Trying to delete food ..."<<std::endl;
+    std::string sql = "DELETE FROM food WHERE name = '"+name+"';";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "delete food failed\n");
+        std::cout<<"delete food failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "delete food success"<<std::endl;
+    }
+    return true;
+}
+
+bool AccessDB::delete_food(int id) {
+    std::cout<<"Trying to delete food ..."<<std::endl;
+    std::string sql = "DELETE FROM food WHERE id = "+std::to_string(id)+";";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "delete food failed\n");
+        std::cout<<"delete food failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "delete food success"<<std::endl;
+    }
+    return true;
+}
+
+bool AccessDB::modify_food_name(int id, const std::string& target_name) {
+    std::cout<<"Trying to modify food name ..."<<std::endl;
+    std::string sql = "UPDATE food SET name = '"+target_name+"' WHERE id = "+std::to_string(id)+";";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "modify food name failed\n");
+        std::cout<<"modify food name failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "modify food name success"<<std::endl;
+    }
+    return true;
+}
+
+bool AccessDB::modify_food_price(int id, int target_price) {
+    std::cout<<"Trying to modify food price ..."<<std::endl;
+    std::string sql = "UPDATE food SET price = "+std::to_string(target_price)+" WHERE id = "+std::to_string(id)+";";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "modify food price failed\n");
+        std::cout<<"modify food price failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "modify food price success"<<std::endl;
+    }
+    return true;
+}
+
+bool AccessDB::modify_food_description(int id, const std::string& target_description) {
+    std::cout<<"Trying to modify food description ..."<<std::endl;
+    std::string sql = "UPDATE food SET description = '"+target_description+"' WHERE id = "+std::to_string(id)+";";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "modify food description failed\n");
+        std::cout<<"modify food description failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "modify food description success"<<std::endl;
+    }
+    return true;
+}
+
+bool AccessDB::reset_food_id() {
+    std::cout << "Resetting id ..." << std::endl;
+
+    // First, rename the old table
+    std::string renameSql = "ALTER TABLE food RENAME TO old_food;";
+    rc = sqlite3_exec(db, renameSql.c_str(), nullptr, nullptr, nullptr);
+    if (rc != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "rename old food table failed\n");
+        std::cout << "rename old food table failed" << std::endl;
+        return false;
+    }
+
+    // Then, create a new table
+    std::string createSql = "CREATE TABLE food (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, price INTEGER NOT NULL, description TEXT NOT NULL);";
+    rc = sqlite3_exec(db, createSql.c_str(), nullptr, nullptr, nullptr);
+    if (rc != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "create new food table failed\n");
+        std::cout << "create new food table failed" << std::endl;
+        return false;
+    }
+
+    // Finally, copy the old data to the new table
+    std::string copySql = "INSERT INTO food SELECT NULL, name, price, description FROM old_food;";
+    rc = sqlite3_exec(db, copySql.c_str(), nullptr, nullptr, nullptr);
+    if (rc != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "copy old data to new food table failed\n");
+        std::cout << "copy old data to new food table failed" << std::endl;
+        return false;
+    }
+
+    // And drop the old table
+    std::string dropSql = "DROP TABLE old_food;";
+    rc = sqlite3_exec(db, dropSql.c_str(), nullptr, nullptr, nullptr);
+    if (rc != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "drop old food table failed\n");
+        std::cout << "drop old food table failed" << std::endl;
+        return false;
+    }
+
+    std::cout << "reset food id success" << std::endl;
+    return true;
+}
+
+bool AccessDB::clear_food_table() {
+    std::cout<<"Clearing food table ..."<<std::endl;
+    std::string sql = "DELETE FROM food;";
+    rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "clear food table failed\n");
+        std::cout<<"clear food table failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "clear food table success"<<std::endl;
+    }
+    return true;
+}
+
+// MANIPULATE PAIR TABLE
+
+bool AccessDB::add_pair(int reservation_id, int food_id) {
+    std::cout<<"Trying to add pair ..."<<std::endl;
+    std::string sql = "INSERT INTO pair (reservation_id, food_id) VALUES ("+std::to_string(reservation_id)+", "+std::to_string(food_id)+");";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "add pair failed\n");
+        std::cout<<"add pair failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "add pair success"<<std::endl;
+    }
+    return true;
+}
+
+bool AccessDB::delete_pair(int reservation_id, int food_id) {
+    std::cout<<"Trying to delete pair ..."<<std::endl;
+    std::string sql = "DELETE FROM pair WHERE reservation_id = "+std::to_string(reservation_id)+" AND food_id = "+std::to_string(food_id)+";";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "delete pair failed\n");
+        std::cout<<"delete pair failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "delete pair success"<<std::endl;
+    }
+    return true;
+}
+
+bool AccessDB::delete_pair(int reservation_id) {
+    std::cout<<"Trying to delete pair ..."<<std::endl;
+    std::string sql = "DELETE FROM pair WHERE reservation_id = "+std::to_string(reservation_id)+";";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "delete pair failed\n");
+        std::cout<<"delete pair failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "delete pair success"<<std::endl;
+    }
+    return true;
+}
+
+bool AccessDB::reset_pair_id() {
+    std::cout << "Resetting id ..." << std::endl;
+
+    // First, rename the old table
+    std::string renameSql = "ALTER TABLE pair RENAME TO old_pair;";
+    rc = sqlite3_exec(db, renameSql.c_str(), nullptr, nullptr, nullptr);
+    if (rc != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "rename old pair table failed\n");
+        std::cout << "rename old pair table failed" << std::endl;
+        return false;
+    }
+
+    // Then, create a new table
+    std::string createSql = "CREATE TABLE pair (reservation_id INTEGER NOT NULL, food_id INTEGER NOT NULL);";
+    rc = sqlite3_exec(db, createSql.c_str(), nullptr, nullptr, nullptr);
+    if (rc != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "create new pair table failed\n");
+        std::cout << "create new pair table failed" << std::endl;
+        return false;
+    }
+
+    // Finally, copy the old data to the new table
+    std::string copySql = "INSERT INTO pair SELECT reservation_id, food_id FROM old_pair;";
+    rc = sqlite3_exec(db, copySql.c_str(), nullptr, nullptr, nullptr);
+    if (rc != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "copy old data to new pair table failed\n");
+        std::cout << "copy old data to new pair table failed" << std::endl;
+        return false;
+    }
+
+    // And drop the old table
+    std::string dropSql = "DROP TABLE old_pair;";
+    rc = sqlite3_exec(db, dropSql.c_str(), nullptr, nullptr, nullptr);
+    if (rc != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "drop old pair table failed\n");
+        std::cout << "drop old pair table failed" << std::endl;
+        return false;
+    }
+
+    std::cout << "reset pair id success" << std::endl;
+    return true;
+}
+
+bool AccessDB::clear_pair_table() {
+    std::cout<<"Clearing pair table ..."<<std::endl;
+    std::string sql = "DELETE FROM pair;";
+    rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "clear pair table failed\n");
+        std::cout<<"clear pair table failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "clear pair table success"<<std::endl;
+    }
+    return true;
+}
+
 // ACQUIRE INFORMATION
 
 bool AccessDB::check_exist(int id, const std::string& table) const {
@@ -805,7 +1090,7 @@ admin AccessDB::get_administrator_info(const std::string &name) const {
 }
 
 reservation AccessDB::get_reservation_info(int id) const {
-    std::string sql = "SELECT * FROM reservation WHERE id = " + std::to_string(id) + ";";
+    std::string sql = "SELECT * FROM reservation WHERE id = ?;";
     sqlite3_stmt* stmt;
 
     // Prepare the SQL statement
@@ -814,6 +1099,9 @@ reservation AccessDB::get_reservation_info(int id) const {
         sqlite3_log(sqlite3_errcode(db), "Failed to prepare SQL statement\n");
         throw std::runtime_error("Failed to prepare SQL statement");
     }
+
+    // Bind the parameters
+    sqlite3_bind_int(stmt, 1, id);
 
     // Execute the SQL statement
     sign = sqlite3_step(stmt);
@@ -871,6 +1159,145 @@ reservation AccessDB::get_reservation_info(const std::string& user_name) const {
     r.table_id = sqlite3_column_int(stmt, 10);
     r.deposit = sqlite3_column_int(stmt, 11);
     return r;
+}
+
+food AccessDB::get_food_info(int id) const {
+    std::string sql = "SELECT * FROM food WHERE id = ?;";
+    sqlite3_stmt* stmt;
+
+    // Prepare the SQL statement
+    int sign = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+    if (sign != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "Failed to prepare SQL statement\n");
+        throw std::runtime_error("Failed to prepare SQL statement");
+    }
+
+    // Bind the parameters
+    sqlite3_bind_int(stmt, 1, id);
+
+    // Execute the SQL statement
+    sign = sqlite3_step(stmt);
+    if (sign != SQLITE_ROW) {
+        sqlite3_log(sqlite3_errcode(db), "Failed to execute SQL statement\n");
+        sqlite3_finalize(stmt);
+        throw std::runtime_error("Failed to execute SQL statement");
+    }
+
+    // Retrieve the data
+    food f;
+    f.id = sqlite3_column_int(stmt, 0);
+    f.name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+    f.price = sqlite3_column_int(stmt, 2);
+    f.description = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+
+    // Finalize the SQL statement
+    sqlite3_finalize(stmt);
+
+    return f;
+}
+
+food AccessDB::get_food_info(const std::string &name) const {
+    std::string sql = "SELECT * FROM food WHERE name = ?;";
+    sqlite3_stmt* stmt;
+
+    // Prepare the SQL statement
+    int sign = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+    if (sign != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "Failed to prepare SQL statement\n");
+        throw std::runtime_error("Failed to prepare SQL statement");
+    }
+
+    // Bind the parameters
+    sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
+
+    // Execute the SQL statement
+    sign = sqlite3_step(stmt);
+    if (sign != SQLITE_ROW) {
+        sqlite3_log(sqlite3_errcode(db), "Failed to execute SQL statement\n");
+        sqlite3_finalize(stmt);
+        throw std::runtime_error("Failed to execute SQL statement");
+    }
+
+    // Retrieve the data
+    food f;
+    f.id = sqlite3_column_int(stmt, 0);
+    f.name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+    f.price = sqlite3_column_int(stmt, 2);
+    f.description = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+
+    // Finalize the SQL statement
+    sqlite3_finalize(stmt);
+
+    return f;
+}
+
+pair AccessDB::get_pair_info(int id) const {
+    std::string sql = "SELECT * FROM pair WHERE id = ?;";
+    sqlite3_stmt* stmt;
+
+    // Prepare the SQL statement
+    int sign = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+    if (sign != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "Failed to prepare SQL statement\n");
+        throw std::runtime_error("Failed to prepare SQL statement");
+    }
+
+    // Bind the parameters
+    sqlite3_bind_int(stmt, 1, id);
+
+    // Execute the SQL statement
+    sign = sqlite3_step(stmt);
+    if (sign != SQLITE_ROW) {
+        sqlite3_log(sqlite3_errcode(db), "Failed to execute SQL statement\n");
+        sqlite3_finalize(stmt);
+        throw std::runtime_error("Failed to execute SQL statement");
+    }
+
+    // Retrieve the data
+    pair p;
+    p.id = sqlite3_column_int(stmt, 0);
+    p.reservation_id = sqlite3_column_int(stmt, 1);
+    p.food_id = sqlite3_column_int(stmt, 2);
+
+    // Finalize the SQL statement
+    sqlite3_finalize(stmt);
+
+    return p;
+}
+
+pair AccessDB::get_pair_info(int reservation_id, int food_id) const {
+    std::string sql = "SELECT * FROM pair WHERE reservation_id = ? AND food_id = ?;";
+    sqlite3_stmt* stmt;
+
+    // Prepare the SQL statement
+    int sign = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+    if (sign != SQLITE_OK) {
+        sqlite3_log(sqlite3_errcode(db), "Failed to prepare SQL statement\n");
+        throw std::runtime_error("Failed to prepare SQL statement");
+    }
+
+    // Bind the parameters
+    sqlite3_bind_int(stmt, 1, reservation_id);
+    sqlite3_bind_int(stmt, 2, food_id);
+
+    // Execute the SQL statement
+    sign = sqlite3_step(stmt);
+    if (sign != SQLITE_ROW) {
+        sqlite3_log(sqlite3_errcode(db), "Failed to execute SQL statement\n");
+        sqlite3_finalize(stmt);
+        throw std::runtime_error("Failed to execute SQL statement");
+    }
+
+    // Retrieve the data
+    pair p;
+    p.id = sqlite3_column_int(stmt, 0);
+    p.reservation_id = sqlite3_column_int(stmt, 1);
+    p.food_id = sqlite3_column_int(stmt, 2);
+
+    // Finalize the SQL statement
+    sqlite3_finalize(stmt);
+
+    return p;
 }
 
 int AccessDB::get_table_length(const std::string& table) const {
@@ -943,6 +1370,49 @@ user AccessDB::getUserInfo(int index) const {
 
     sqlite3_finalize(statement);
     return u;
+}
+
+food AccessDB::getFoodInfo(int index) const {
+    std::string sqlQuery = "SELECT * FROM food LIMIT 1 OFFSET " + std::to_string(index) + ";";
+    sqlite3_stmt* statement;
+    int result = sqlite3_prepare_v2(db, sqlQuery.c_str(), -1, &statement, nullptr);
+
+    if (result != SQLITE_OK) {
+        std::cerr << "Failed to retrieve food info" << std::endl;
+        throw std::runtime_error("Failed to retrieve food info");
+    }
+
+    food f;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        f.id = sqlite3_column_int(statement, 0);
+        f.name = reinterpret_cast<const char*>(sqlite3_column_text(statement, 1));
+        f.price = sqlite3_column_int(statement, 2);
+        f.description = reinterpret_cast<const char*>(sqlite3_column_text(statement, 3));
+    }
+
+    sqlite3_finalize(statement);
+    return f;
+}
+
+pair AccessDB::getPairInfo(int index) const {
+    std::string sqlQuery = "SELECT * FROM pair LIMIT 1 OFFSET " + std::to_string(index) + ";";
+    sqlite3_stmt* statement;
+    int result = sqlite3_prepare_v2(db, sqlQuery.c_str(), -1, &statement, nullptr);
+
+    if (result != SQLITE_OK) {
+        std::cerr << "Failed to retrieve pair info" << std::endl;
+        throw std::runtime_error("Failed to retrieve pair info");
+    }
+
+    pair p;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        p.id = sqlite3_column_int(statement, 0);
+        p.reservation_id = sqlite3_column_int(statement, 1);
+        p.food_id = sqlite3_column_int(statement, 2);
+    }
+
+    sqlite3_finalize(statement);
+    return p;
 }
 
 // VERIFY PASSWORD
@@ -1073,6 +1543,27 @@ void AccessDB::print_all(const std::string& table) const // Print different tabl
             std::cout<<"end minute: "<<sqlite3_column_int(stmt, 8)<<std::endl;
         }
     }
+    else if (table == "food")
+    {
+        std::cout<<"food table:"<<std::endl;
+        while (sqlite3_step(stmt) == SQLITE_ROW)
+        {
+            std::cout<<"id: "<<sqlite3_column_int(stmt, 0)<<std::endl;
+            std::cout<<"name: "<<std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)))<<std::endl;
+            std::cout<<"price: "<<sqlite3_column_int(stmt, 2)<<std::endl;
+            std::cout<<"description: "<<std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3)))<<std::endl;
+        }
+    }
+    else if (table == "pair")
+    {
+        std::cout<<"pair table:"<<std::endl;
+        while (sqlite3_step(stmt) == SQLITE_ROW)
+        {
+            std::cout<<"id: "<<sqlite3_column_int(stmt, 0)<<std::endl;
+            std::cout<<"reservation id: "<<sqlite3_column_int(stmt, 1)<<std::endl;
+            std::cout<<"food id: "<<sqlite3_column_int(stmt, 2)<<std::endl;
+        }
+    }
 }
 
 void AccessDB::print_all() const // Print all tables.
@@ -1080,4 +1571,6 @@ void AccessDB::print_all() const // Print all tables.
     print_all("administrator");
     print_all("user");
     print_all("reservation");
+    print_all("food");
+    print_all("pair");
 }

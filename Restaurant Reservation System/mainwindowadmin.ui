@@ -42,13 +42,13 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="reservation_tab">
      <attribute name="title">
       <string>Reservation</string>
      </attribute>
-     <widget class="QLineEdit" name="depositEdit">
+     <widget class="QLineEdit" name="table_priceEdit">
       <property name="geometry">
        <rect>
         <x>560</x>
@@ -58,7 +58,7 @@
        </rect>
       </property>
       <property name="placeholderText">
-       <string>Deposit</string>
+       <string>Table price</string>
       </property>
      </widget>
      <widget class="QTimeEdit" name="begin_timeEdit">
@@ -173,9 +173,9 @@
         <hour>16</hour>
         <minute>0</minute>
         <second>0</second>
-        <year>2023</year>
-        <month>12</month>
-        <day>30</day>
+        <year>2024</year>
+        <month>5</month>
+        <day>27</day>
        </datetime>
       </property>
       <property name="calendarPopup">
@@ -266,7 +266,209 @@
        </rect>
       </property>
       <property name="text">
-       <string>Click add to add a reservation</string>
+       <string>Click Add to add a reservation</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Food reservation</string>
+     </attribute>
+     <widget class="QTableWidget" name="pair_table">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>90</y>
+        <width>751</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string>Pair ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Username</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Reservation ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Food ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Food name</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Price</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QLabel" name="pair_promptLabel">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>241</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Click Delete to delete a food reservation</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pair_deleteButton">
+      <property name="geometry">
+       <rect>
+        <x>720</x>
+        <y>40</y>
+        <width>61</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Delete</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>Food</string>
+     </attribute>
+     <widget class="QTableWidget" name="food_table">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>90</y>
+        <width>751</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string>Food ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Price</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Description</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QLabel" name="add_food_promptLabel">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>181</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Click Add to add food</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="food_addButton">
+      <property name="geometry">
+       <rect>
+        <x>650</x>
+        <y>40</y>
+        <width>61</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Add</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="food_deleteButton">
+      <property name="geometry">
+       <rect>
+        <x>720</x>
+        <y>40</y>
+        <width>61</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Delete</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="foodnameEdit">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>40</y>
+        <width>121</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="inputMask">
+       <string/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
+       <string>Food name</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="foodpriceEdit">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>40</y>
+        <width>61</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="inputMask">
+       <string/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
+       <string>Price</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="fooddescriptionEdit">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>40</y>
+        <width>411</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="inputMask">
+       <string/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
+       <string>Description</string>
       </property>
      </widget>
     </widget>
@@ -430,7 +632,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>There buttons are typically used for testing.</string>
+       <string>These buttons are typically used for testing.</string>
       </property>
      </widget>
      <widget class="QPushButton" name="reservation_table_createButton">
@@ -443,7 +645,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Clear reservation Table</string>
+       <string>Create reservation Table</string>
       </property>
      </widget>
      <widget class="QPushButton" name="administrator_table_createButton">
@@ -456,7 +658,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Clear administrator Table</string>
+       <string>Create administrator Table</string>
       </property>
      </widget>
      <widget class="QPushButton" name="user_table_createButton">
@@ -469,7 +671,85 @@
        </rect>
       </property>
       <property name="text">
-       <string>Clear user Table</string>
+       <string>Create user Table</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pair_id_resetButton">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>310</y>
+        <width>191</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Reset pair ID</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pair_table_clearButton">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>310</y>
+        <width>191</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Clear pair Table</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pair_table_createButton">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>310</y>
+        <width>191</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Create pair Table</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="food_id_resetButton">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>250</y>
+        <width>191</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Reset food ID</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="food_table_clearButton">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>250</y>
+        <width>191</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Clear food Table</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="food_table_createButton">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>250</y>
+        <width>191</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Create food Table</string>
       </property>
      </widget>
     </widget>
