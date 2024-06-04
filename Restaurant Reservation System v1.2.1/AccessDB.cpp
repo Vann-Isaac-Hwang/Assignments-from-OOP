@@ -889,6 +889,23 @@ bool AccessDB::delete_pair(int reservation_id) {
     return true;
 }
 
+bool AccessDB::delete_pair_by_id(int pair_id) {
+    std::cout<<"Trying to delete pair ..."<<std::endl;
+    std::string sql = "DELETE FROM pair WHERE id = "+std::to_string(pair_id)+";";
+    int rc_local = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, nullptr);
+    if (rc_local == SQLITE_ERROR)
+    {
+        sqlite3_log(sqlite3_errcode(db), "delete pair failed\n");
+        std::cout<<"delete pair failed"<<std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "delete pair success"<<std::endl;
+    }
+    return true;
+}
+
 bool AccessDB::reset_pair_id() {
     std::cout << "Resetting id ..." << std::endl;
 

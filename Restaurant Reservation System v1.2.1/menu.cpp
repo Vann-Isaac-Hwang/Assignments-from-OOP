@@ -149,8 +149,8 @@ void menu::on_removeButton_clicked()
     if (ui->this_food_table->hasFocus()) return;
     std::cout<<"Row "<<row<<std::endl;
 
-    int cor_food_id = ui->this_food_table->item(row,1)->text().toInt();
-    db.delete_pair(reservation_id, cor_food_id);
+    int cor_pair_id = ui->this_food_table->item(row,0)->text().toInt();
+    db.delete_pair_by_id(cor_pair_id);
 
     get_this_food_list();
 }

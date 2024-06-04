@@ -117,6 +117,7 @@ public:
     bool add_pair(int reservation_id, int food_id);
     bool delete_pair(int reservation_id, int food_id);
     bool delete_pair(int reservation_id);
+    bool delete_pair_by_id(int pair_id);
     bool reset_pair_id();
     bool clear_pair_table();
 
