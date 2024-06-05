@@ -2,8 +2,6 @@
 #include "ui_login.h"
 #include <iostream>
 
-#include <windows.h>
-
 login::login(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::login)

@@ -42,7 +42,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="reservation_tab">
      <attribute name="title">
@@ -170,7 +170,7 @@
       </property>
       <property name="dateTime">
        <datetime>
-        <hour>16</hour>
+        <hour>8</hour>
         <minute>0</minute>
         <second>0</second>
         <year>2024</year>
@@ -830,7 +830,7 @@
      <x>0</x>
      <y>0</y>
      <width>850</width>
-     <height>21</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>

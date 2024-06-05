@@ -604,6 +604,7 @@ void MainWindowAdmin::on_reservation_id_resetButton_clicked()
 void MainWindowAdmin::on_reservation_table_clearButton_clicked()
 {
     log("on_reservation_table_clearButton_clicked: Clearing reservation table...");
+    db.clear_pair_table();
     db.clear_reservation_table();
     get_reservation_list();
     log();
@@ -672,6 +673,7 @@ void MainWindowAdmin::on_food_id_resetButton_clicked()
 void MainWindowAdmin::on_food_table_clearButton_clicked()
 {
     db.clear_food_table();
+    db.clear_pair_table();
 }
 
 void MainWindowAdmin::on_food_table_createButton_clicked()
